@@ -49,9 +49,8 @@ export default class HeadlinesScreen extends Component {
     return index.toString();
   }
 
-  _gotoNewsSubject() {
-    console.log("goto");
-    this.props.navigation.navigate('Home');
+  _gotoNewsSubject(item) {
+    this.props.navigation.navigate('HeadlineDetail', { source: item.source.name, title: item.title, url: item.url });
   }
 
   _renderItem({ item }) {
@@ -63,7 +62,7 @@ export default class HeadlinesScreen extends Component {
         </View>
       }
 
-      onPress={this._gotoNewsSubject}
+      onPress={() => {this._gotoNewsSubject(item)}}
       subtitle={
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={{ textAlign: 'left' }}><MCIcon name='newspaper' /> {item.source.name}</Text>

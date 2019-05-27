@@ -18,14 +18,11 @@ var template = function (t, n) {
 };
 
 var prettyTime = function (time) {
-    console.log(time);
     if (!time) return;
     var now = new Date();
     var releasedDate = new Date(time);
     var seconds = ((now.getTime() - releasedDate) * .001) >> 0;
-    console.log(seconds);
     var minutes = seconds / 60;
-    console.log(minutes);
     var hours = minutes / 60;
     var days = hours / 24;
     var years = days / 365;
