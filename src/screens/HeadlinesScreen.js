@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, FlatList, Image } from 'react-native';
-import { Button, ThemeProvider, ListItem, Card, ImageResizeMode, Header } from 'react-native-elements';
+import { ThemeProvider, ListItem, Card, ImageResizeMode, Header, Button } from 'react-native-elements';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MIcon from 'react-native-vector-icons/MaterialIcons';
+import { Icon } from 'react-native-elements';
 import prettyTime from '../util/timeUtil';
-
 import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { TouchableHighlight } from 'react-native-gesture-handler';
+import HeadlineDetailMenu from './HeadlineDetailMenu';
+import HeadlinesMenu from './HeadlinesMenu';
+import { fetchBookmarks, saveBookmark, removeBookmark } from '../storage/bookmarkStorage';
 
 export default class HeadlinesScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -21,7 +25,6 @@ export default class HeadlinesScreen extends Component {
     this._fetchStory = this._fetchStory.bind(this);
     this._keyExtractor = this._keyExtractor.bind(this);
     this._renderItem = this._renderItem.bind(this);
-    this.component1 = this.component1.bind(this);
     this._gotoNewsSubject = this._gotoNewsSubject.bind(this);
   }
 
@@ -29,13 +32,23 @@ export default class HeadlinesScreen extends Component {
     this._fetchStory();
   }
 
-  _fetchStory() {
+  async _fetchStory() {
+
+    let bookmarks = await fetchBookmarks();
     fetch(`https://newsapi.org/v2/everything?q=${this.state.newsType}&language=tr&apiKey=55d51f93924344e083d2f96a773ff0d1`)
       .then((response) => response.json())
       .then((responseJson) => {
+        let headlines = responseJson.articles;
+        headlines.forEach((headline, index1) => {
+          bookmarks.forEach((bookmark, index2) => {
+            if (headline.url.includes(bookmark.url)) {
+              headlines[index1].isBookmarked = true;
+            }
+          })
+        });
         this.setState({
           isLoading: false,
-          dataSource: responseJson.articles,
+          dataSource: headlines,
         });
       })
       .catch((error) => {
@@ -43,7 +56,33 @@ export default class HeadlinesScreen extends Component {
       });
   }
 
-  component1() { return <MIcon size={20} name='more-vert' />; }
+  onSaveBookmark = async (headline) => {
+    await saveBookmark(headline);
+    let headlines = this.state.dataSource.slice(0);
+    headlines.forEach((h, i) => {
+      if (h.url.includes(headline.url)) {
+        headlines[i].isBookmarked = true;
+      }
+    });
+    this.setState({
+      dataSource: headlines,
+    });
+  };
+
+
+  onRemoveBookmark = async (headline) => {
+    await removeBookmark(headline);
+    let headlines = this.state.dataSource.slice(0);
+    headlines.forEach((h, i) => {
+      if (h.url.includes(headline.url)) {
+        headlines[i].isBookmarked = false;
+      }
+    });
+    this.setState({
+      dataSource: headlines,
+    });
+  };
+
 
   _keyExtractor(item, index) {
     return index.toString();
@@ -56,13 +95,19 @@ export default class HeadlinesScreen extends Component {
   _renderItem({ item }) {
     return (<ListItem
       title={
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', height:55 }}>
+        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', height: 55 }}>
           <Text style={{ flex: 1, textAlign: "left", fontSize: 15 }} >{item.title}</Text>
-          <MIcon name='more-vert' size={20} />
+          <HeadlinesMenu
+            menutext="Menu"
+            url="{navigation.state.params.url}"
+            onSave={this.onSaveBookmark}
+            onRemove={this.onRemoveBookmark}
+            headline={item}
+          />
         </View>
       }
 
-      onPress={() => {this._gotoNewsSubject(item)}}
+      onPress={() => { this._gotoNewsSubject(item) }}
       subtitle={
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={{ textAlign: 'left' }}><MCIcon name='newspaper' /> {item.source.name}</Text>
