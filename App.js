@@ -4,6 +4,7 @@ import HeadlinesScreen from './src/screens/HeadlinesScreen';
 import NewsSubjectsScreen from './src/screens/NewsSubjectsScreen';
 import HeadlineDetailScreen from './src/screens/HeadlineDetailScreen';
 import { Text } from 'react-native';
+import BookmarksScreen from './src/screens/BookmarksScreen';
 
 
 const navigationConfig = {
@@ -22,6 +23,7 @@ const navigationConfig = {
 const MainNavigator = createStackNavigator({
   Home: { screen: NewsSubjectsScreen },
   Headlines: { screen: HeadlinesScreen },
+  Bookmarks: { screen: BookmarksScreen },
   HeadlineDetail: {
     screen: HeadlineDetailScreen,
     // navigationOptions: {

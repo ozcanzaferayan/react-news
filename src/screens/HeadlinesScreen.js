@@ -6,14 +6,19 @@ import MIcon from 'react-native-vector-icons/MaterialIcons';
 import { Icon } from 'react-native-elements';
 import prettyTime from '../util/timeUtil';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
-import { TouchableHighlight } from 'react-native-gesture-handler';
+import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
 import HeadlineDetailMenu from './HeadlineDetailMenu';
 import HeadlinesMenu from './HeadlinesMenu';
 import { fetchBookmarks, saveBookmark, removeBookmark } from '../storage/bookmarkStorage';
 
 export default class HeadlinesScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: `${navigation.state.params.section} Haberleri`
+    title: `${navigation.state.params.section} Haberleri`,
+    headerRight: (
+      <TouchableOpacity onPress={() => navigation.navigate('Bookmarks')}>
+      <MIcon style={{marginRight: 15, color: '#fff', fontSize: 25}} name='bookmark' />
+      </TouchableOpacity>
+    )
   });
   constructor(props) {
     super(props);
