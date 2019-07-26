@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, FlatList, Image, Dimensions, ImageBackground, TouchableHighlight } from 'react-native';
-import { Button, ThemeProvider, ListItem, Card, ImageResizeMode, Header, Tile } from 'react-native-elements';
-import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MIcon from 'react-native-vector-icons/MaterialIcons';
-import prettyTime from '../util/timeUtil';
+import { Text, View, FlatList, Dimensions, ImageBackground, TouchableHighlight, StyleSheet } from 'react-native';
 
 const numColumns = 3;
 const imageUrlPrefix = "https://images.unsplash.com/photo-";
@@ -40,16 +36,6 @@ export default class NewsSubjectsScreen extends Component {
     var tileWidth = Dimensions.get('window').width / numColumns;
 
     return (
-      // <Tile
-      //   onPress={() => { this.onPressSubject(item) }}
-      //   contentContainerStyle={{fontSize: 5}}
-      //   width={tileWidth}
-      //   imageSrc={{ uri: imageUrlPrefix + item.imageId + imageUrlSuffix }}
-      //   title={item.title}
-      //   titleStyle={{height: 25, fontFamily: 'Futura', fontSize: 5}}
-      //   featured={true}
-      //   h3
-      // />
       <View
         style={{
           flex: 1,
@@ -57,14 +43,24 @@ export default class NewsSubjectsScreen extends Component {
           height: tileWidth,
           maxWidth: tileWidth,
         }}>
-        <TouchableHighlight onPress={() => { this.onPressSubject(item) }}>
+        <TouchableHighlight onPress={() => { this.onPressSubject(item) }} style={{ backgroundColor: '#000' }}>
           <ImageBackground
             source={{ uri: imageUrlPrefix + item.imageId + imageUrlSuffix }}
             style={{
               width: tileWidth,
               height: tileWidth,
-              justifyContent: 'center'
+              justifyContent: 'center',
+              backgroundColor: '#fff'
             }}>
+            <View style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0,
+              backgroundColor: '#000',
+              opacity: 0.3
+            }} />
             <Text style={{
               textAlign: 'center',
               fontSize: 15,
@@ -85,7 +81,7 @@ export default class NewsSubjectsScreen extends Component {
         keyExtractor={this.keyExtractor}
         data={dataSource}
         renderItem={this.renderItem}
-        numColumns={3}
+        numColumns={numColumns}
       />
     );
   }

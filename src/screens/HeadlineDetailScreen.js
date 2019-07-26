@@ -23,6 +23,7 @@ export default class HeadlineDetailScreen extends Component {
     return (
       <WebView
         source={{ uri: this.props.navigation.state.params.url }}
+        startInLoadingState={true} // Yükleniyor ibaresinin görüntülenmesi için
       />
     );
   }

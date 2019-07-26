@@ -43,6 +43,9 @@ export default class BookmarksScreen extends Component {
 
   async _fetchStory() {
     let bookmarks = await fetchBookmarks();
+    bookmarks.forEach(x => {
+      x.isBookmarked = true;
+    })
     this.setState({
       isLoading: false,
       dataSource: bookmarks,
@@ -86,7 +89,7 @@ export default class BookmarksScreen extends Component {
   }
 
   _renderItem({ item }) {
-    return (<ListItem
+    return (item.isBookmarked && <ListItem
       title={
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', height: 55 }}>
           <Text style={{ flex: 1, textAlign: "left", fontSize: 15 }} >{item.title}</Text>

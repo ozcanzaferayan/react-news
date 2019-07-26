@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import HeadlinesScreen from './src/screens/HeadlinesScreen';
 import NewsSubjectsScreen from './src/screens/NewsSubjectsScreen';
 import HeadlineDetailScreen from './src/screens/HeadlineDetailScreen';
-import { Text } from 'react-native';
+import { StatusBar } from 'react-native';
 import BookmarksScreen from './src/screens/BookmarksScreen';
 
 
@@ -13,7 +13,7 @@ const navigationConfig = {
     headerStyle: {
       backgroundColor: '#2196F3',
     },
-    headerTintColor: '#fff',
+     headerTintColor: '#fff',
     headerTitleStyle: {
       fontWeight: 'bold',
     },
@@ -25,13 +25,11 @@ const MainNavigator = createStackNavigator({
   Headlines: { screen: HeadlinesScreen },
   Bookmarks: { screen: BookmarksScreen },
   HeadlineDetail: {
-    screen: HeadlineDetailScreen,
-    // navigationOptions: {
-    //   headerBackTitle: 'asd',
-    //   headerBackImage: <Text>geri</Text>,
-    // }
+    screen: HeadlineDetailScreen
   },
 }, navigationConfig);
+
+StatusBar.setBarStyle('light-content', true);
 
 const App = createAppContainer(MainNavigator);
 
